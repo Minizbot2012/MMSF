@@ -1,0 +1,16 @@
+<?xml version='1.0'?><!-- Game is either sse, tesv, or fo4 -->
+<PapyrusProject xmlns="PapyrusProject.xsd"
+    Flags="TESV_Papyrus_Flags.flg"
+    Game="sse"
+    Output="Scripts\Scripts"
+    Optimize="false"
+    Release="false"
+    Final="false">
+    <Imports>
+        <Import>.\Scripts\Source\Scripts</Import>
+        <Import>..\..\..\..\Bethesda\Data\SSE\mods\OG_SRC\Source\Scripts</Import>
+    </Imports>
+    <Folders>
+        <Folder>.\Scripts\Source\Scripts</Folder>
+    </Folders>
+</PapyrusProject>

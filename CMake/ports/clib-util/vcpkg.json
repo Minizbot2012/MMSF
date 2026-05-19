@@ -1,0 +1,7 @@
+{
+  "name": "clib-util",
+  "version-string": "2026-02-02",
+  "license": "MIT",
+  "supports": "windows & x64",
+  "homepage": "https://github.com/powerof3/CLibUtil"
+}
