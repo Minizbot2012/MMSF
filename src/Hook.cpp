@@ -63,11 +63,7 @@ namespace MPL::Hooks
                     map->emplace(a_str, a_this);
                 }
                 logger::info("SFEID {} {}", a_str, RE::FormTypeToString(a_this->GetFormType()));
-                if (a_this->GetFormType() != RE::FormType::Region)
-                {
-                    logger::info("Caching {}", RE::FormTypeToString(a_this->GetFormType()));
-                    MPL::Services::EDIDFormID::FormIDCaching::GetSingleton()->CacheForm(std::string(a_str), a_this->GetFormID());
-                }
+                MPL::Services::EDIDFormID::FormIDCaching::GetSingleton()->CacheForm(std::string(a_str), a_this->GetFormID());
             }
             return func(a_this, a_str);
         }
