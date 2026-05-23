@@ -58,9 +58,11 @@ namespace MPL::Services::EDIDFormID
         if (!this->edidCaches.edid_to_formid.contains(edid))
         {
             auto frm = RE::TESForm::LookupByEditorID(edid);
-            auto id = frm->GetFormID();
-            this->edidCaches.edid_to_formid[edid] = id;
-            this->edidCaches.formid_to_edid[id] = edid;
+            if (frm != nullptr)
+            {
+                auto id = frm->GetFormID();
+                this->CacheForm(edid, id);
+            }
         }
         return this->edidCaches.edid_to_formid[edid];
     }
@@ -75,7 +77,7 @@ namespace MPL::Services::EDIDFormID
             std::string edid = RE::TESForm::LookupByID(fid)->GetFormEditorID();
             if (!edid.empty())
             {
-                CacheForm(edid, fid);
+                this->CacheForm(edid, fid);
                 return edid;
             }
             else
@@ -93,7 +95,7 @@ namespace MPL::Services::EDIDFormID
         }
         else
         {
-            return RE::TESForm::LookupByID(this->LookupEdid(edid));
+            frm = RE::TESForm::LookupByID(this->LookupEdid(edid));
         }
         return frm;
     }
