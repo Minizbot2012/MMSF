@@ -1,4 +1,5 @@
 #include "Hooking.h"
+#include "RE/F/FormTypes.h"
 #include <EDIDCache.h>
 #include <Hook.h>
 namespace MPL::Hooks
@@ -49,8 +50,34 @@ namespace MPL::Hooks
         }
         static inline REL::Relocation<decltype(thunk)> func;
     };
+    struct SetFormEditorID
+    {
+        static bool thunk(RE::TESForm* a_this, const char* a_str)
+        {
+            if (!std::string(a_str).empty() && !a_this->IsDynamicForm())
+            {
+                const auto& [map, lock] = RE::TESForm::GetAllFormsByEditorID();
+                const RE::BSWriteLockGuard locker{ lock };
+                if (map)
+                {
+                    map->emplace(a_str, a_this);
+                }
+                logger::info("SFEID {} {}", a_str, RE::FormTypeToString(a_this->GetFormType()));
+                if (a_this->GetFormType() != RE::FormType::Region)
+                {
+                    logger::info("Caching {}", RE::FormTypeToString(a_this->GetFormType()));
+                    MPL::Services::EDIDFormID::FormIDCaching::GetSingleton()->CacheForm(std::string(a_str), a_this->GetFormID());
+                }
+            }
+            return func(a_this, a_str);
+        }
+        static inline REL::Relocation<decltype(thunk)> func;
+        static constexpr VariantIndex index = VariantIndex(0x33);
+    };
     void Install()
     {
+        stl::write_vfunc<RE::TESWeather, SetFormEditorID>();
+        stl::write_vfunc<RE::TESRegion, SetFormEditorID>();
         stl::install_hook<TESWeather_Load_TESFile_ReadChunkData>();
         stl::install_hook<TESRegion_Load_TESFile_ReadChunkData>();
     }
