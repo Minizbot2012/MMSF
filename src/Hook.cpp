@@ -73,8 +73,8 @@ namespace MPL::Hooks
     void Install()
     {
         stl::write_vfunc<RE::TESWeather, SetFormEditorID>();
-        stl::write_vfunc<RE::TESRegion, SetFormEditorID>();
         stl::install_hook<TESWeather_Load_TESFile_ReadChunkData>();
+        stl::write_vfunc<RE::TESRegion, SetFormEditorID>();
         stl::install_hook<TESRegion_Load_TESFile_ReadChunkData>();
     }
 }  // namespace MPL::Hooks
