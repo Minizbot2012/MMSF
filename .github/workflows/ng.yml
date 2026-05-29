@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  PRESET: "vs2022-windows-vcpkg"
+  PRESET: "vs2026-windows-vcpkg"
   PROJECT_NAME: MMSF
   VCPKG_ROOT: "C:\\vcpkg"
 
