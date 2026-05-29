@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          recursive: true
+          submodules: "recursive"
       - name: Update VCPKG
         run: |
           cd ${{ env.VCPKG_INSTALLATION_ROOT }}
