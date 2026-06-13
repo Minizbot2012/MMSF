@@ -1,4 +1,5 @@
 #include <EDIDCache.h>
+#include <cstdint>
 #include <mutex>
 #include <rfl/msgpack/load.hpp>
 #include <rfl/msgpack/save.hpp>
@@ -9,8 +10,11 @@ namespace MPL::Services::EDIDFormID
         auto TDH = RE::TESDataHandler::GetSingleton();
         this->file = const_cast<RE::TESFile*>(TDH->LookupModByName("MMSF.esp"));
         if (this->base_id == 0x0)
-            this->base_id = (uint32_t)file->compileIndex << 24 | (uint32_t)file->smallFileCompileIndex << 12;
+            this->base_id = (uint32_t)file->compileIndex << 24;
+        if (this->file->IsLight())
+            this->base_id |= (uint32_t)file->smallFileCompileIndex << 12;
         Load();
+        this->is_init = true;
     }
     void FormIDCaching::Load()
     {
@@ -39,15 +43,20 @@ namespace MPL::Services::EDIDFormID
         {
             this->allocations.map[edid] = this->allocations.offset;
             this->allocations.offset++;
+            if(this->file->IsLight() && this->allocations.offset >= 4096) {
+                logger::error("MMSF.esp has more than 4096 forms, crashing game for safety (Unmark as ESL to fix).");
+                stl::report_and_fail("MMSF.esp is a light plugin with over 4096 forms, crashing game for safety (Unmark as esl to fix).");
+            }
             return this->base_id | this->allocations.map.at(edid);
         }
     }
     RE::TESForm* FormIDCaching::CreateForm(std::string edid, RE::FormType type)
     {
+        auto edidrc = std::format("MMSF_{:04X}_{:08X}", static_cast<unsigned int>(type), RE::detail::GenerateCRC32(std::span<const uint8_t>{ reinterpret_cast<const uint8_t*>(edid.data()), edid.size() }));
         auto cfc = RE::IFormFactory::GetFormFactoryByType(type);
         RE::TESForm* form = cfc->Create();
-        form->SetFormID(this->Allocate(edid), false);
-        form->SetFormEditorID(edid.c_str());
+        form->SetFormID(this->Allocate(edidrc), false);
+        form->SetFormEditorID(edidrc.c_str());
         form->SetFile(this->file);
         this->CacheForm(edid, form->GetFormID());
         Save();

@@ -5,6 +5,8 @@ namespace MPL::Papyrus
 {
     static inline std::string GetEditorID(RE::StaticFunctionTag*, RE::TESForm* form)
     {
+        if(!form)
+            return "None";
         auto cached = MPL::Services::EDIDFormID::FormIDCaching::GetSingleton();
         auto formID = form->GetFormID();
         auto edid = cached->LookupFormID(formID);

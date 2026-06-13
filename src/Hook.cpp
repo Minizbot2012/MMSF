@@ -1,5 +1,4 @@
-#include "Hooking.h"
-#include "RE/F/FormTypes.h"
+#include <Hooking.h>
 #include <EDIDCache.h>
 #include <Hook.h>
 namespace MPL::Hooks
