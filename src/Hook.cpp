@@ -1,11 +1,12 @@
-#include <Hooking.h>
 #include <EDIDCache.h>
 #include <Hook.h>
+#include <Hooking.h>
 namespace MPL::Hooks
 {
     struct TESWeather_Load_TESFile_ReadChunkData
     {
-        static inline constexpr REL::RelocationID relocation = REL::RelocationID(19965, 20396, 19965);
+        using Target = RE::TESWeather;
+        static inline constexpr VariantIndex index = VariantIndex(0x6);
         static inline constexpr REL::VariantOffset offset = REL::VariantOffset(0x3CD, 0x403, 0x3CD);
         static bool thunk(RE::TESFile* a_this, void* ptr, std::uint32_t a_chunkSize)
         {
@@ -28,7 +29,8 @@ namespace MPL::Hooks
     };
     struct TESRegion_Load_TESFile_ReadChunkData
     {
-        static inline constexpr REL::RelocationID relocation = REL::RelocationID(16198, 16442);
+        using Target = RE::TESRegion;
+        static inline constexpr VariantIndex index = VariantIndex(0x6);
         static inline constexpr REL::VariantOffset offset = REL::VariantOffset(0x104, 0x104, 0x104);
         static bool thunk(RE::TESFile* a_this, void* ptr, std::uint32_t a_chunkSize)
         {
@@ -72,8 +74,8 @@ namespace MPL::Hooks
     void Install()
     {
         stl::write_vfunc<RE::TESWeather, SetFormEditorID>();
-        stl::install_hook<TESWeather_Load_TESFile_ReadChunkData>();
         stl::write_vfunc<RE::TESRegion, SetFormEditorID>();
+        stl::install_hook<TESWeather_Load_TESFile_ReadChunkData>();
         stl::install_hook<TESRegion_Load_TESFile_ReadChunkData>();
     }
 }  // namespace MPL::Hooks
