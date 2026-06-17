@@ -47,6 +47,7 @@ namespace MPL::Services::EDIDFormID
                 logger::error("MMSF.esp has more than 4096 forms, crashing game for safety (Unmark as ESL to fix).");
                 stl::report_and_fail("MMSF.esp is a light plugin with over 4096 forms, crashing game for safety (Unmark as esl to fix).");
             }
+            Save();
             return this->base_id | this->allocations.map.at(edid);
         }
     }
@@ -59,7 +60,6 @@ namespace MPL::Services::EDIDFormID
         form->SetFormEditorID(edidrc.c_str());
         form->SetFile(this->file);
         this->CacheForm(edid, form->GetFormID());
-        Save();
         return form;
     }
     RE::FormID FormIDCaching::LookupEdid(std::string edid)
