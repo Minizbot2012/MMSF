@@ -15,7 +15,9 @@ namespace MPL::Hooks
             {
                 if (auto str = static_cast<const char* const>(ptr); !std::string(str).empty() && a_this->currentform.formID != 0)
                 {
+#ifndef NDEBUG
                     logger::info("Caching Weather {}", str);
+#endif
                     MPL::Services::EDIDFormID::FormIDCaching::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
                 }
             }
@@ -39,7 +41,9 @@ namespace MPL::Hooks
             {
                 if (auto str = static_cast<const char* const>(ptr); !std::string(str).empty() && a_this->currentform.formID != 0)
                 {
+#ifndef NDEBUG
                     logger::info("Caching Region {}", str);
+#endif
                     MPL::Services::EDIDFormID::FormIDCaching::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
                 }
             }
@@ -63,7 +67,9 @@ namespace MPL::Hooks
                 {
                     map->emplace(a_str, a_this);
                 }
+#ifndef NDEBUG
                 logger::info("SFEID {} {}", a_str, RE::FormTypeToString(a_this->GetFormType()));
+#endif
                 MPL::Services::EDIDFormID::FormIDCaching::GetSingleton()->CacheForm(std::string(a_str), a_this->GetFormID());
             }
             return func(a_this, a_str);
