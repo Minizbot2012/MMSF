@@ -57,11 +57,10 @@ namespace MPL::Services::EDIDFormID
     RE::TESForm* CachingService::CreateForm(std::string edid, RE::FormType type)
     {
         auto hash = this->GetHash(edid);
-        auto edidrc = std::format("MMSF_{:04X}_{:08X}", static_cast<unsigned int>(type), hash);
         auto cfc = RE::IFormFactory::GetFormFactoryByType(type);
         RE::TESForm* form = cfc->Create();
         form->SetFormID(this->Allocate(hash), false);
-        form->SetFormEditorID(edidrc.c_str());
+        form->SetFormEditorID(edid.c_str());
         form->SetFile(this->file);
         this->CacheForm(edid, form->GetFormID());
         return form;
