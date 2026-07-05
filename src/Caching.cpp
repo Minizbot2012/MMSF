@@ -1,8 +1,6 @@
 #include <Caching.h>
 #include <cstdint>
 #include <mutex>
-#include <rfl/msgpack/load.hpp>
-#include <rfl/msgpack/save.hpp>
 #include <xxhash.h>
 namespace MPL::Services::EDIDFormID
 {
@@ -18,7 +16,7 @@ namespace MPL::Services::EDIDFormID
     }
     CachedData::CachedData()
     {
-        auto load = rfl::msgpack::load<CachedDataInternal>("MMSFCache.bin");
+        auto load = rfl::ubjson::load<CachedDataInternal>("MMSFCache.bin");
         if (load.has_value())
         {
             this->data = load.value();
@@ -26,7 +24,7 @@ namespace MPL::Services::EDIDFormID
     }
     void CachedData::Save()
     {
-        rfl::msgpack::save("MMSFCache.bin", this->data);
+        rfl::ubjson::save("MMSFCache.bin", this->data);
     }
     CachedData::~CachedData()
     {

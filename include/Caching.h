@@ -1,9 +1,7 @@
 #include <cstdint>
 #include <rfl.hpp>
-#include <rfl/msgpack.hpp>
-#include <rfl/msgpack/save.hpp>
+#include <rfl/ubjson.hpp>
 #include <string>
-#include <unordered_map>
 namespace MPL::Services::EDIDFormID
 {
     struct EdidCache

@@ -3,7 +3,7 @@
   "version-string": "1",
   "dependencies": [
     "xxhash",
-    { "name": "reflectcpp", "features": ["msgpack"] },
+    { "name": "reflectcpp", "features": ["ubjson"] },
     {
       "name": "directxmath",
       "version>=": "2025-04-03"
