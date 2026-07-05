@@ -156,6 +156,8 @@ namespace MPL::Services::EDIDFormID
     }
     bool CachingService::LoadOrderChanged()
     {
+        if (this->load_order_state == LoadOrderState::NotCalculated)
+            this->GetLoadOrderHash();
         return this->load_order_state == LoadOrderState::Changed;
     }
 
