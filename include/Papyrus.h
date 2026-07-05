@@ -1,20 +1,20 @@
 #include "RE/T/TESForm.h"
 #include "RE/T/TypeTraits.h"
-#include <EDIDCache.h>
+#include <Caching.h>
 namespace MPL::Papyrus
 {
     static inline std::string GetEditorID(RE::StaticFunctionTag*, RE::TESForm* form)
     {
         if(!form)
             return "None";
-        auto cached = MPL::Services::EDIDFormID::FormIDCaching::GetSingleton();
+        auto cached = MPL::Services::EDIDFormID::CachingService::GetSingleton();
         auto formID = form->GetFormID();
         auto edid = cached->LookupFormID(formID);
         return edid;
     }
     static inline RE::TESForm* GetFormByEDID(RE::StaticFunctionTag*, std::string edid)
     {
-        auto cached = MPL::Services::EDIDFormID::FormIDCaching::GetSingleton();
+        auto cached = MPL::Services::EDIDFormID::CachingService::GetSingleton();
         return cached->LookupCachedForm(edid);
     }
     static inline bool Register(RE::BSScript::IVirtualMachine* vm)

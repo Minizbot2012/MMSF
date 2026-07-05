@@ -1,4 +1,4 @@
-#include <EDIDCache.h>
+#include <Caching.h>
 #include <Hook.h>
 #include <Hooking.h>
 namespace MPL::Hooks
@@ -18,7 +18,7 @@ namespace MPL::Hooks
 #ifndef NDEBUG
                     logger::info("Caching Weather {}", str);
 #endif
-                    MPL::Services::EDIDFormID::FormIDCaching::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
+                    MPL::Services::EDIDFormID::CachingService::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
                 }
             }
             return result;
@@ -44,7 +44,7 @@ namespace MPL::Hooks
 #ifndef NDEBUG
                     logger::info("Caching Region {}", str);
 #endif
-                    MPL::Services::EDIDFormID::FormIDCaching::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
+                    MPL::Services::EDIDFormID::CachingService::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
                 }
             }
             return result;
@@ -70,7 +70,7 @@ namespace MPL::Hooks
 #ifndef NDEBUG
                 logger::info("SFEID {} {}", a_str, RE::FormTypeToString(a_this->GetFormType()));
 #endif
-                MPL::Services::EDIDFormID::FormIDCaching::GetSingleton()->CacheForm(std::string(a_str), a_this->GetFormID());
+                MPL::Services::EDIDFormID::CachingService::GetSingleton()->CacheForm(std::string(a_str), a_this->GetFormID());
             }
             return func(a_this, a_str);
         }

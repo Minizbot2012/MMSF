@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.31)
 set(NAME "MMSF" CACHE STRING "")
-set(VERSION 1.0.0.0 CACHE STRING "")
+set(VERSION 1.1.0.0 CACHE STRING "")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # ---- Cache build vars ----
@@ -86,12 +86,14 @@ target_include_directories(
 )
 
 find_package(reflectcpp CONFIG REQUIRED)
+find_package(xxHash CONFIG REQUIRED)
 
 target_link_libraries(
  ${PROJECT_NAME}
  PRIVATE
   CommonLibSSE::CommonLibSSE
   reflectcpp::reflectcpp
+  xxHash::xxhash
 )
 
 target_precompile_headers(
