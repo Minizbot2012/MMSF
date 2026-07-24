@@ -3,12 +3,12 @@
 #define UNICODE
 #define _UNICODE
 // clang-format off
-#include <SKSE/SKSE.h>
 #include <RE/Skyrim.h>
-#include <windows.h>
+#include <SKSE/SKSE.h>
+#include <REX/REX.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/fmt/bin_to_hex.h>
-#include <REX/REX.h>
+#include <windows.h>
 // clang-format on
 namespace logger = SKSE::log;
 using namespace REX;

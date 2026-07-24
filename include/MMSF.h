@@ -1,7 +1,7 @@
 #pragma once
 #include <MMSF_API.h>
 #include <cstdint>
-namespace MPL::API
+namespace MPL::API::MMSF
 {
     class Interface : public ServiceMap
     {

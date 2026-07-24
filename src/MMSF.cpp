@@ -1,6 +1,6 @@
 #include <MMSF.h>
 #include <Caching.h>
-namespace MPL::API
+namespace MPL::API::MMSF
 {
     uint8_t Interface::GetMMSFVersion() {
         return 1;

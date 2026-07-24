@@ -57,6 +57,10 @@ namespace MPL::Services::EDIDFormID
     RE::TESForm* CachingService::CreateForm(std::string edid, RE::FormType type)
     {
         auto hash = this->GetHash(edid);
+        if(this->edidCaches.edid_to_formid.contains(edid))
+        {
+            return this->LookupCachedForm(edid);
+        }
         auto cfc = RE::IFormFactory::GetFormFactoryByType(type);
         RE::TESForm* form = cfc->Create();
         form->SetFormID(this->Allocate(hash), false);

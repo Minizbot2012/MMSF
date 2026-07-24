@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  PROJECT_NAME: LumaUtil
+  PROJECT_NAME: MMSF
   VCPKG_ROOT: "C:\\vcpkg"
 
 permissions:
