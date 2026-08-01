@@ -16,7 +16,7 @@ namespace MPL::Services::EDIDFormID
     }
     CachedData::CachedData()
     {
-        auto load = rfl::ubjson::load<CachedDataInternal>("MMSFCache.bin");
+        auto load = rfl::flexbuf::load<CachedDataInternal>("./Data/SKSE/MMSFCache.bin");
         if (load.has_value())
         {
             this->data = load.value();
@@ -24,7 +24,7 @@ namespace MPL::Services::EDIDFormID
     }
     void CachedData::Save()
     {
-        rfl::ubjson::save("MMSFCache.bin", this->data);
+        rfl::flexbuf::save("./Data/SKSE/MMSFCache.bin", this->data);
     }
     CachedData::~CachedData()
     {
@@ -44,29 +44,32 @@ namespace MPL::Services::EDIDFormID
         }
         else
         {
-            if (this->file->IsLight() && cache->data.allocation_offset >= 4096)
+            auto fid = cache->data.FormIDPool.allocate();
+            if (this->file->IsLight() && fid > 0xFFF)
             {
-                logger::error("MMSF.esp has more than 4096 forms, crashing game for safety (Unmark as ESL to fix).");
-                stl::report_and_fail("MMSF.esp is a light plugin with over 4096 forms, crashing game for safety (Unmark as esl to fix).");
+                logger::error("MMSF.esp has more than 4095 forms, crashing game for safety (Unmark as ESL to fix).");
+                stl::report_and_fail("MMSF.esp is a light plugin with over 4095 forms, crashing game for safety (Unmark as esl to fix).");
             }
-            cache->data.allocation_map[hash] = cache->data.allocation_offset;
-            cache->data.allocation_offset++;
+            cache->data.allocation_map[hash] = fid;
             return this->base_id | cache->data.allocation_map.at(hash);
         }
     }
     RE::TESForm* CachingService::CreateForm(std::string edid, RE::FormType type)
     {
         auto hash = this->GetHash(edid);
-        if(this->edidCaches.edid_to_formid.contains(edid))
-        {
-            return this->LookupCachedForm(edid);
+        if(this->formgen_map.contains(hash)) {
+            return this->formgen_map[hash];
         }
         auto cfc = RE::IFormFactory::GetFormFactoryByType(type);
         RE::TESForm* form = cfc->Create();
         form->SetFormID(this->Allocate(hash), false);
         form->SetFormEditorID(edid.c_str());
         form->SetFile(this->file);
-        this->CacheForm(edid, form->GetFormID());
+        const auto& [map, lock] = RE::TESForm::GetAllFormsByEditorID();
+        const RE::BSWriteLockGuard locker(lock);
+        RE::BSWriteLockGuard _guard(lock);
+        map->emplace(edid, form);
+        this->formgen_map[hash] = form;
         return form;
     }
     RE::FormID CachingService::LookupEdid(std::string edid)
@@ -125,43 +128,6 @@ namespace MPL::Services::EDIDFormID
         {
             this->edidCaches.formid_to_edid[id] = edid;
         }
-    }
-    uint64_t CachingService::GetLoadOrderHash()
-    {
-        if (this->load_order_state == LoadOrderState::NotCalculated)
-        {
-            XXH3_state_t* state = XXH3_createState();
-            XXH3_64bits_reset(state);
-            for (auto tdh_file : RE::TESDataHandler::GetSingleton()->files)
-            {
-                XXH3_64bits_update(state, tdh_file->GetFilename().data(), tdh_file->GetFilename().size());
-                XXH3_64bits_update(state, &tdh_file->filesize, sizeof(tdh_file->filesize));
-                XXH3_64bits_update(state, &tdh_file->formCount, sizeof(tdh_file->formCount));
-                XXH3_64bits_update(state, &tdh_file->masterCount, sizeof(tdh_file->masterCount));
-            }
-            uint64_t hash = XXH3_64bits_digest(state);
-            XXH3_freeState(state);
-            if (hash != CachedData::GetSingleton()->data.hash)
-            {
-                CachedData::GetSingleton()->data.hash = hash;
-                this->load_order_state = LoadOrderState::Changed;
-            }
-            else
-            {
-                this->load_order_state = LoadOrderState::Unchanged;
-            }
-            return hash;
-        }
-        else
-        {
-            return CachedData::GetSingleton()->data.hash;
-        }
-    }
-    bool CachingService::LoadOrderChanged()
-    {
-        if (this->load_order_state == LoadOrderState::NotCalculated)
-            this->GetLoadOrderHash();
-        return this->load_order_state == LoadOrderState::Changed;
     }
 
     uint64_t CachingService::GetHash(std::string str)

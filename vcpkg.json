@@ -4,6 +4,6 @@
   "dependencies": [
     "xxhash",
     "commonlibsse-ng",
-    { "name": "reflectcpp", "features": ["ubjson"] }
+    { "name": "reflectcpp", "features": ["flexbuffers"] }
   ]
 }

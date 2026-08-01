@@ -1,32 +1,30 @@
-#include <MMSF.h>
 #include <Caching.h>
+#include <MMSF_API.h>
+#include <MMSF.h>
 namespace MPL::API::MMSF
 {
-    uint8_t Interface::GetMMSFVersion() {
-        return 1;
+    MMSFAPIFeatures Shim::GetVersion()
+    {
+        return MMSF::EmbedVersion(0x1) | MMSFAPIFeatures::kCaching | MMSFAPIFeatures::kAllocator;
     }
-    std::string Interface::LookupEDIDForFormID(RE::FormID fid) {
-        auto caching = Services::EDIDFormID::CachingService::GetSingleton();
+    std::string Shim::LookupEDIDForFormID(RE::FormID fid)
+    {
+        auto caching = MPL::Services::EDIDFormID::CachingService::GetSingleton();
         return caching->LookupFormID(fid);
     }
-    RE::FormID Interface::LookupFormIDForEDID(std::string edid) {
-        auto caching = Services::EDIDFormID::CachingService::GetSingleton();
+    RE::FormID Shim::LookupFormIDForEDID(std::string edid)
+    {
+        auto caching = MPL::Services::EDIDFormID::CachingService::GetSingleton();
         return caching->LookupEdid(edid);
     }
-    RE::TESForm* Interface::LookupCachedForm(std::string edid) {
-        auto caching = Services::EDIDFormID::CachingService::GetSingleton();
+    RE::TESForm* Shim::LookupCachedForm(std::string edid)
+    {
+        auto caching = MPL::Services::EDIDFormID::CachingService::GetSingleton();
         return caching->LookupCachedForm(edid);
     }
-    RE::TESForm* Interface::AllocateForm(std::string editorId, RE::FormType type) {
+    RE::TESForm* Shim::AllocateForm(std::string editorId, RE::FormType type)
+    {
         auto caching = Services::EDIDFormID::CachingService::GetSingleton();
         return caching->CreateForm(editorId, type);
     }
-    bool Interface::LoadOrderChanged() {
-        auto caching = Services::EDIDFormID::CachingService::GetSingleton();
-        return caching->LoadOrderChanged();
-    }
-    uint64_t Interface::GetLoadOrderHash() {
-        auto caching = Services::EDIDFormID::CachingService::GetSingleton();
-        return caching->GetLoadOrderHash();
-    }
-}  // namespace MPL::API
+}  // namespace MPL::API::MMSF

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.40)
 set(NAME "MMSF" CACHE STRING "")
-set(VERSION 1.1.0.0 CACHE STRING "")
+set(VERSION 1.2.0.0 CACHE STRING "")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # ---- Cache build vars ----
@@ -28,6 +28,12 @@ project(
  ${NAME}
  VERSION ${VERSION}
  LANGUAGES CXX
+)
+
+configure_file(
+ ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Plugin.h.in
+ ${CMAKE_CURRENT_BINARY_DIR}/include/Plugin.h
+ @ONLY
 )
 
 # ---- Include guards ----

@@ -1,10 +1,10 @@
-#include "MMSF_API.h"
-#include "SKSE/Interfaces.h"
-#include <Hook.h>
+#include <MMSF_API.h>
 #include <MMSF.h>
+#include <Hook.h>
 #include <Papyrus.h>
+#include <SKSE/Interfaces.h>
 
-MPL::API::MMSF::Interface g_mmsf;
+MPL::API::MMSF::Shim g_mmsf;
 void APIHandler(SKSE::MessagingInterface::Message* msg)
 {
     switch (msg->type)
@@ -19,7 +19,6 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
     switch (msg->type)
     {
     case SKSE::MessagingInterface::kDataLoaded:
-        logger::info("Load order hash: {:016X}", MPL::Services::EDIDFormID::CachingService::GetSingleton()->GetLoadOrderHash());
         MPL::Services::EDIDFormID::CachedData::GetSingleton()->Save();
         break;
     case SKSE::MessagingInterface::kSaveGame:

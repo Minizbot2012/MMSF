@@ -1,17 +1,13 @@
-#pragma once
-#include <MMSF_API.h>
-#include <cstdint>
+#include "MMSF_API.h"
 namespace MPL::API::MMSF
 {
-    class Interface : public ServiceMap
+    class Shim : public Interface
     {
     public:
-        uint8_t GetMMSFVersion() override;
+        MMSFAPIFeatures GetVersion() override;
         RE::FormID LookupFormIDForEDID(std::string) override;
         std::string LookupEDIDForFormID(RE::FormID) override;
         RE::TESForm* LookupCachedForm(std::string) override;
         RE::TESForm* AllocateForm(std::string, RE::FormType) override;
-        bool LoadOrderChanged() override;
-        uint64_t GetLoadOrderHash() override;
     };
 }  // namespace MPL::API
