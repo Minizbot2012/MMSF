@@ -2,6 +2,7 @@
 #include <MMSF.h>
 #include <Hook.h>
 #include <Papyrus.h>
+#include <Plugin.h>
 #include <SKSE/Interfaces.h>
 
 MPL::API::MMSF::Shim g_mmsf;
@@ -31,12 +32,13 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
 }
 
 SKSEPluginInfo(
-        .Version = REL::Version{ 1, 1, 0, 0 },
-    .Name = "MMSF"sv,
+    .Version = REL::Version{ MPL::Plugin::MAJOR, MPL::Plugin::MINOR, MPL::Plugin::PATCH, 0 },
+    .Name = MPL::Plugin::PROJECT,
     .Author = "Mini"sv,
     .SupportEmail = ""sv,
     .StructCompatibility = SKSE::StructCompatibility::Independent,
-    .RuntimeCompatibility = SKSE::VersionIndependence::AddressLibrary);
+    .RuntimeCompatibility = SKSE::VersionIndependence::AddressLibrary
+);
 
 SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
 {
