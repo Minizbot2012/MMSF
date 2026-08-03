@@ -1,4 +1,5 @@
 #include <Caching.h>
+#include <RE/T/TESDataHandler.h>
 #include <cstdint>
 #include <mutex>
 #include <xxhash.h>
@@ -57,19 +58,12 @@ namespace MPL::Services::EDIDFormID
     RE::TESForm* CachingService::CreateForm(std::string edid, RE::FormType type)
     {
         auto hash = this->GetHash(edid);
-        if(this->formgen_map.contains(hash)) {
-            return this->formgen_map[hash];
-        }
         auto cfc = RE::IFormFactory::GetFormFactoryByType(type);
         RE::TESForm* form = cfc->Create();
-        form->SetFormID(this->Allocate(hash), false);
+        form->SetFormID(this->Allocate(hash), true);
         form->SetFormEditorID(edid.c_str());
-        form->SetFile(this->file);
-        const auto& [map, lock] = RE::TESForm::GetAllFormsByEditorID();
-        const RE::BSWriteLockGuard locker(lock);
-        RE::BSWriteLockGuard _guard(lock);
-        map->emplace(edid, form);
-        this->formgen_map[hash] = form;
+        auto* TDH = RE::TESDataHandler::GetSingleton();
+        TDH->AddFormToDataHandler(form);
         return form;
     }
     RE::FormID CachingService::LookupEdid(std::string edid)
