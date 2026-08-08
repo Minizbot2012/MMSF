@@ -22,6 +22,9 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
     case SKSE::MessagingInterface::kDataLoaded:
         MPL::Services::EDIDFormID::CachedData::GetSingleton()->Save();
         break;
+    case SKSE::MessagingInterface::kPostLoad:
+        SKSE::GetMessagingInterface()->RegisterListener(nullptr, APIHandler);
+        break;
     case SKSE::MessagingInterface::kSaveGame:
     case SKSE::MessagingInterface::kNewGame:
         MPL::Services::EDIDFormID::CachedData::GetSingleton()->Save();
