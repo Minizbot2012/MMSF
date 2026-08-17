@@ -1,9 +1,8 @@
-#include <MMSF_API.h>
 #include <MMSF.h>
 #include <Hook.h>
 #include <Papyrus.h>
+#include <Services.h>
 #include <Plugin.h>
-#include <SKSE/Interfaces.h>
 
 MPL::API::MMSF::Shim g_mmsf;
 void APIHandler(SKSE::MessagingInterface::Message* msg)
@@ -19,15 +18,13 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
 {
     switch (msg->type)
     {
-    case SKSE::MessagingInterface::kDataLoaded:
-        MPL::Services::EDIDFormID::CachedData::GetSingleton()->Save();
-        break;
     case SKSE::MessagingInterface::kPostLoad:
         SKSE::GetMessagingInterface()->RegisterListener(nullptr, APIHandler);
         break;
     case SKSE::MessagingInterface::kSaveGame:
     case SKSE::MessagingInterface::kNewGame:
-        MPL::Services::EDIDFormID::CachedData::GetSingleton()->Save();
+    case SKSE::MessagingInterface::kPreLoadGame:
+        MPL::Services::CachedData::GetSingleton()->Save();
         break;
     default:
         break;

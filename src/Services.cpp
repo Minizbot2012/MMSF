@@ -1,11 +1,10 @@
-#include <Caching.h>
-#include <RE/T/TESDataHandler.h>
+#include <Services.h>
 #include <cstdint>
 #include <mutex>
 #include <xxhash.h>
-namespace MPL::Services::EDIDFormID
+namespace MPL::Services
 {
-    void CachingService::Init()
+    void ServiceContainer::Init()
     {
         auto TDH = RE::TESDataHandler::GetSingleton();
         this->file = const_cast<RE::TESFile*>(TDH->LookupModByName("MMSF.esp"));
@@ -31,7 +30,7 @@ namespace MPL::Services::EDIDFormID
     {
         Save();
     }
-    RE::FormID CachingService::Allocate(uint64_t hash)
+    RE::FormID ServiceContainer::Allocate(uint64_t hash)
     {
         std::lock_guard _guard(this->_lock);
         auto cache = CachedData::GetSingleton();
@@ -55,7 +54,7 @@ namespace MPL::Services::EDIDFormID
             return this->base_id | cache->data.allocation_map.at(hash);
         }
     }
-    RE::TESForm* CachingService::CreateForm(std::string edid, RE::FormType type)
+    RE::TESForm* ServiceContainer::CreateForm(std::string edid, RE::FormType type)
     {
         auto hash = this->GetHash(edid);
         auto cfc = RE::IFormFactory::GetFormFactoryByType(type);
@@ -66,7 +65,7 @@ namespace MPL::Services::EDIDFormID
         TDH->AddFormToDataHandler(form);
         return form;
     }
-    RE::FormID CachingService::LookupEdid(std::string edid)
+    RE::FormID ServiceContainer::LookupEdid(std::string edid)
     {
         if (!this->edidCaches.edid_to_formid.contains(edid))
         {
@@ -79,7 +78,7 @@ namespace MPL::Services::EDIDFormID
         }
         return this->edidCaches.edid_to_formid[edid];
     }
-    std::string CachingService::LookupFormID(RE::FormID fid)
+    std::string ServiceContainer::LookupFormID(RE::FormID fid)
     {
         if (this->edidCaches.formid_to_edid.contains(fid))
         {
@@ -99,7 +98,7 @@ namespace MPL::Services::EDIDFormID
             }
         }
     }
-    RE::TESForm* CachingService::LookupCachedForm(std::string edid)
+    RE::TESForm* ServiceContainer::LookupCachedForm(std::string edid)
     {
         auto frm = RE::TESForm::LookupByEditorID(edid);
         if (frm != nullptr)
@@ -112,7 +111,7 @@ namespace MPL::Services::EDIDFormID
         }
         return frm;
     }
-    void CachingService::CacheForm(std::string edid, RE::FormID id)
+    void ServiceContainer::CacheForm(std::string edid, RE::FormID id)
     {
         if (!this->edidCaches.edid_to_formid.contains(edid))
         {
@@ -124,7 +123,7 @@ namespace MPL::Services::EDIDFormID
         }
     }
 
-    uint64_t CachingService::GetHash(std::string str)
+    uint64_t ServiceContainer::GetHash(std::string str)
     {
         return XXH3_64bits(str.data(), str.size());
     }

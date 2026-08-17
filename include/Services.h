@@ -1,9 +1,10 @@
+#pragma once
 #include <cstdint>
 #include <rfl.hpp>
 #include <rfl/flexbuf.hpp>
 #include <string>
 #include <unordered_map>
-namespace MPL::Services::EDIDFormID
+namespace MPL::Services
 {
     struct EdidCache
     {
@@ -74,7 +75,7 @@ namespace MPL::Services::EDIDFormID
         void Save();
         CachedDataInternal data;
     };
-    class CachingService : public REX::Singleton<CachingService>
+    class ServiceContainer : public REX::Singleton<ServiceContainer>
     {
     private:
         bool is_init = false;
