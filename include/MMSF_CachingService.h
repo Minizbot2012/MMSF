@@ -1,9 +1,8 @@
 #pragma once
 #include <MMSF_API.h>
-#include <cstdint>
 namespace MPL::API::MMSF
 {
-    class CachingService : public ICachedData
+    class CachingService : public IEDIDCache
     {
     private:
         std::unordered_map<std::string, RE::FormID> edid_to_formid;
@@ -16,8 +15,6 @@ namespace MPL::API::MMSF
             static CachingService instance;
             return &instance;
         }
-        uint8_t GetVersion() override;
-        std::string GetName() override;
         void Initialize() override;
         rfl::Generic::Object Save();
         void Load(rfl::Generic::Object) override;

@@ -5,14 +5,6 @@
 #include <rfl/to_generic.hpp>
 namespace MPL::API::MMSF
 {
-    uint8_t AllocatorService::GetVersion()
-    {
-        return 1;
-    }
-    std::string AllocatorService::GetName()
-    {
-        return "Alloc";
-    }
     rfl::Generic::Object AllocatorService::Save()
     {
         rfl::Generic::Object obj;

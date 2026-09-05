@@ -20,8 +20,6 @@ namespace MPL::API::MMSF
             static AllocatorService instance;
             return &instance;
         }
-        uint8_t GetVersion() override;
-        std::string GetName() override;
         void Initialize() override;
         rfl::Generic::Object Save() override;
         void Load(rfl::Generic::Object) override;

@@ -1,6 +1,6 @@
 #pragma once
-#include <cstdint>
 #include <rfl/Generic.hpp>
+#include <cstdint>
 #include <type_traits>
 namespace MPL::API::MMSF
 {
@@ -35,15 +35,20 @@ namespace MPL::API::MMSF
         virtual rfl::Generic::Object Save() = 0;
         virtual void Load(rfl::Generic::Object) = 0;
     };
+    //Service name "ALLOC"
     class IFormAllocator : public IPluginService
     {
     public:
+        uint8_t GetVersion() override { return 1; }
+        std::string GetName() override { return "ALLOC"; }
         virtual RE::TESForm* CreateForm(std::string, RE::FormType) = 0;
     };
-
-    class ICachedData : public IPluginService
+    //Service name "EDID"
+    class IEDIDCache : public IPluginService
     {
     public:
+        uint8_t GetVersion() override { return 1; }
+        std::string GetName() override { return "EDID"; }
         virtual RE::FormID LookupEdid(std::string) = 0;
         virtual std::string LookupFormID(RE::FormID) = 0;
         virtual RE::TESForm* LookupCachedForm(std::string) = 0;

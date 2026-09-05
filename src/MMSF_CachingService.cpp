@@ -4,14 +4,6 @@
 
 namespace MPL::API::MMSF
 {
-    uint8_t CachingService::GetVersion()
-    {
-        return 1;
-    }
-    std::string CachingService::GetName()
-    {
-        return "EdidCache";
-    }
     void CachingService::Initialize()
     {
     }
