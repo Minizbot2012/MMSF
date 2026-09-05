@@ -12,6 +12,7 @@ namespace MPL::Services
     private:
         std::mutex _lock;
         std::unordered_map<std::string, API::MMSF::IPluginService*> service_map;
+
     public:
         void Init();
         void Save();

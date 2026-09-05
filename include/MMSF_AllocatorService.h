@@ -13,6 +13,7 @@ namespace MPL::API::MMSF
         std::unordered_map<uint64_t, RE::TESForm*> formgen_map;
         std::unordered_map<uint64_t, uint32_t> allocation_map;
         MPL::Common::IdPool FormIDPool;
+
     public:
         static AllocatorService* GetSingleton()
         {

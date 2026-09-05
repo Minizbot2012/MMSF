@@ -2,18 +2,24 @@
 #include <MMSF_CachingService.h>
 #include <rfl/Generic.hpp>
 
-namespace MPL::API::MMSF {
-    uint8_t CachingService::GetVersion() {
+namespace MPL::API::MMSF
+{
+    uint8_t CachingService::GetVersion()
+    {
         return 1;
     }
-    std::string CachingService::GetName() {
+    std::string CachingService::GetName()
+    {
         return "EdidCache";
     }
-    void CachingService::Initialize() {
+    void CachingService::Initialize()
+    {
     }
-    void CachingService::Load(rfl::Generic::Object) {
+    void CachingService::Load(rfl::Generic::Object)
+    {
     }
-    rfl::Generic::Object CachingService::Save() {
+    rfl::Generic::Object CachingService::Save()
+    {
         return rfl::Generic::Object();
     }
     RE::FormID CachingService::LookupEdid(std::string edid)
@@ -74,4 +80,4 @@ namespace MPL::API::MMSF {
         }
     }
 
-}
+}  // namespace MPL::API::MMSF

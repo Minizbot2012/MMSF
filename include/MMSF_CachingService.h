@@ -1,15 +1,18 @@
 #pragma once
 #include <MMSF_API.h>
 #include <cstdint>
-namespace MPL::API::MMSF {
+namespace MPL::API::MMSF
+{
     class CachingService : public ICachedData
     {
     private:
         std::unordered_map<std::string, RE::FormID> edid_to_formid;
         std::unordered_map<RE::FormID, std::string> formid_to_edid;
         CachingService() = default;
+
     public:
-        static CachingService* GetSingleton() {
+        static CachingService* GetSingleton()
+        {
             static CachingService instance;
             return &instance;
         }
@@ -23,4 +26,4 @@ namespace MPL::API::MMSF {
         RE::TESForm* LookupCachedForm(std::string) override;
         void CacheForm(std::string, RE::FormID) override;
     };
-}
+}  // namespace MPL::API::MMSF
