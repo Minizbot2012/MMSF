@@ -1,6 +1,6 @@
 #include <Hook.h>
 #include <Hooking.h>
-#include <Services.h>
+#include <MMSF_CachingService.h>
 namespace MPL::Hooks
 {
     struct TESWeather_Load_TESFile_ReadChunkData
@@ -18,7 +18,7 @@ namespace MPL::Hooks
 #ifndef NDEBUG
                     logger::info("Caching Weather {}", str);
 #endif
-                    MPL::Services::ServiceContainer::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
+                    MPL::API::MMSF::CachingService::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
                 }
             }
             return result;
@@ -44,7 +44,7 @@ namespace MPL::Hooks
 #ifndef NDEBUG
                     logger::info("Caching Region {}", str);
 #endif
-                    MPL::Services::ServiceContainer::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
+                    MPL::API::MMSF::CachingService::GetSingleton()->CacheForm(std::string(str), a_this->currentform.formID);
                 }
             }
             return result;
@@ -70,7 +70,7 @@ namespace MPL::Hooks
 #ifndef NDEBUG
                 logger::info("SFEID {} {}", a_str, RE::FormTypeToString(a_this->GetFormType()));
 #endif
-                MPL::Services::ServiceContainer::GetSingleton()->CacheForm(std::string(a_str), a_this->GetFormID());
+                MPL::API::MMSF::CachingService::GetSingleton()->CacheForm(std::string(a_str), a_this->GetFormID());
             }
             return func(a_this, a_str);
         }
