@@ -12,7 +12,7 @@ namespace MPL::API::MMSF
         auto serviceContainer = MPL::Services::ServiceContainer::GetSingleton();
         serviceContainer->RegisterService(service);
     }
-    API::MMSF::IPluginService* Shim::QueryService(std::string& name)
+    API::MMSF::IPluginService* Shim::QueryService(std::string name)
     {
         auto serviceContainer = MPL::Services::ServiceContainer::GetSingleton();
         return serviceContainer->QueryService(name);

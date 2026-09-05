@@ -41,7 +41,7 @@ namespace MPL::API::MMSF
     public:
         uint8_t GetVersion() override { return 1; }
         std::string GetName() override { return "ALLOC"; }
-        virtual RE::TESForm* CreateForm(std::string, RE::FormType) = 0;
+        virtual RE::TESForm* AllocateForm(std::string, RE::FormType) = 0;
     };
     //Service name "EDID"
     class IEDIDCache : public IPluginService
@@ -60,7 +60,7 @@ namespace MPL::API::MMSF
     public:
         virtual MMSFAPIFeatures GetVersion() = 0;
         virtual void RegisterService(IPluginService*) = 0;
-        virtual IPluginService* QueryService(std::string&) = 0;
+        virtual IPluginService* QueryService(std::string) = 0;
     };
 
     struct MMSFMessage

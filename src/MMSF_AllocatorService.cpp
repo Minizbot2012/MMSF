@@ -50,7 +50,7 @@ namespace MPL::API::MMSF
             return this->base_id | this->allocation_map.at(hash);
         }
     }
-    RE::TESForm* AllocatorService::CreateForm(std::string edid, RE::FormType type)
+    RE::TESForm* AllocatorService::AllocateForm(std::string edid, RE::FormType type)
     {
         auto hash = MPL::Services::ServiceContainer::GetSingleton()->GetHash(edid);
         auto cfc = RE::IFormFactory::GetFormFactoryByType(type);

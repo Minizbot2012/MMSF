@@ -43,7 +43,7 @@ namespace MPL::Services
             service->Initialize();
         }
     }
-    API::MMSF::IPluginService* ServiceContainer::QueryService(std::string& name)
+    API::MMSF::IPluginService* ServiceContainer::QueryService(std::string name)
     {
         if (this->service_map.contains(name))
         {

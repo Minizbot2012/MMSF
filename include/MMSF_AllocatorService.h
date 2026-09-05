@@ -23,6 +23,6 @@ namespace MPL::API::MMSF
         void Initialize() override;
         rfl::Generic::Object Save() override;
         void Load(rfl::Generic::Object) override;
-        RE::TESForm* CreateForm(std::string, RE::FormType) override;
+        RE::TESForm* AllocateForm(std::string, RE::FormType) override;
     };
 }  // namespace MPL::API::MMSF

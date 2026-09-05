@@ -7,6 +7,6 @@ namespace MPL::API::MMSF
     public:
         MMSFAPIFeatures GetVersion() override;
         void RegisterService(API::MMSF::IPluginService*) override;
-        API::MMSF::IPluginService* QueryService(std::string&) override;
+        API::MMSF::IPluginService* QueryService(std::string) override;
     };
 }  // namespace MPL::API::MMSF

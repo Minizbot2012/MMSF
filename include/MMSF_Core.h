@@ -17,7 +17,7 @@ namespace MPL::Services
         void Init();
         void Save();
         uint64_t GetHash(std::string);
-        API::MMSF::IPluginService* QueryService(std::string&);
+        API::MMSF::IPluginService* QueryService(std::string);
         void RegisterService(API::MMSF::IPluginService*);
     };
 }  // namespace MPL::Services
