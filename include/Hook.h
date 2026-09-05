@@ -2,4 +2,4 @@
 namespace MPL::Hooks
 {
     void Install();
-}  // namespace MPL
+}  // namespace MPL::Hooks

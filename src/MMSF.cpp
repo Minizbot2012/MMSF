@@ -1,30 +1,20 @@
-#include <Services.h>
-#include <MMSF_API.h>
 #include <MMSF.h>
+#include <MMSF_API.h>
+#include <MMSF_Core.h>
 namespace MPL::API::MMSF
 {
     MMSFAPIFeatures Shim::GetVersion()
     {
-        return MMSF::EmbedVersion(0x1) | MMSFAPIFeatures::kCaching | MMSFAPIFeatures::kAllocator;
+        return MMSF::EmbedVersion(0x2) | MMSFAPIFeatures::kCaching | MMSFAPIFeatures::kAllocator | MMSFAPIFeatures::kCoreService;
     }
-    std::string Shim::LookupEDIDForFormID(RE::FormID fid)
+    void Shim::RegisterService(API::MMSF::IPluginService* service)
     {
-        auto caching = MPL::Services::ServiceContainer::GetSingleton();
-        return caching->LookupFormID(fid);
+        auto serviceContainer = MPL::Services::ServiceContainer::GetSingleton();
+        serviceContainer->RegisterService(service);
     }
-    RE::FormID Shim::LookupFormIDForEDID(std::string edid)
+    API::MMSF::IPluginService* Shim::QueryService(std::string& name)
     {
-        auto caching = MPL::Services::ServiceContainer::GetSingleton();
-        return caching->LookupEdid(edid);
-    }
-    RE::TESForm* Shim::LookupCachedForm(std::string edid)
-    {
-        auto caching = MPL::Services::ServiceContainer::GetSingleton();
-        return caching->LookupCachedForm(edid);
-    }
-    RE::TESForm* Shim::AllocateForm(std::string editorId, RE::FormType type)
-    {
-        auto caching = MPL::Services::ServiceContainer::GetSingleton();
-        return caching->CreateForm(editorId, type);
+        auto serviceContainer = MPL::Services::ServiceContainer::GetSingleton();
+        return serviceContainer->QueryService(name);
     }
 }  // namespace MPL::API::MMSF

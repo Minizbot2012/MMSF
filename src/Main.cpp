@@ -1,8 +1,12 @@
-#include <MMSF.h>
+#include "MMSF_AllocatorService.h"
+#include "MMSF_CachingService.h"
 #include <Hook.h>
+#include <MMSF.h>
+#include <MMSF_Core.h>
 #include <Papyrus.h>
-#include <Services.h>
 #include <Plugin.h>
+#include <SKSE/Interfaces.h>
+#include <rfl/Generic.hpp>
 
 MPL::API::MMSF::Shim g_mmsf;
 void APIHandler(SKSE::MessagingInterface::Message* msg)
@@ -18,13 +22,17 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
 {
     switch (msg->type)
     {
+    case SKSE::MessagingInterface::kPostPostLoad:
+        MPL::Services::ServiceContainer::GetSingleton()->Init();
     case SKSE::MessagingInterface::kPostLoad:
         SKSE::GetMessagingInterface()->RegisterListener(nullptr, APIHandler);
+        MPL::Services::ServiceContainer::GetSingleton()->RegisterService(MPL::API::MMSF::CachingService::GetSingleton());
+        MPL::Services::ServiceContainer::GetSingleton()->RegisterService(MPL::API::MMSF::AllocatorService::GetSingleton());
         break;
     case SKSE::MessagingInterface::kSaveGame:
     case SKSE::MessagingInterface::kNewGame:
     case SKSE::MessagingInterface::kPreLoadGame:
-        MPL::Services::CachedData::GetSingleton()->Save();
+        MPL::Services::ServiceContainer::GetSingleton()->Save();
         break;
     default:
         break;
@@ -32,13 +40,12 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
 }
 
 SKSEPluginInfo(
-    .Version = REL::Version{ MPL::Plugin::MAJOR, MPL::Plugin::MINOR, MPL::Plugin::PATCH, 0 },
+        .Version = REL::Version{ MPL::Plugin::MAJOR, MPL::Plugin::MINOR, MPL::Plugin::PATCH, 0 },
     .Name = MPL::Plugin::PROJECT,
     .Author = "Mini"sv,
     .SupportEmail = ""sv,
     .StructCompatibility = SKSE::StructCompatibility::Independent,
-    .RuntimeCompatibility = SKSE::VersionIndependence::AddressLibrary
-);
+    .RuntimeCompatibility = SKSE::VersionIndependence::AddressLibrary);
 
 SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
 {
@@ -46,7 +53,8 @@ SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
     logger::info("Game version : {}", a_skse->RuntimeVersion().string());
     SKSE::GetMessagingInterface()->RegisterListener(MessageHandler);
     SKSE::GetMessagingInterface()->RegisterListener(nullptr, APIHandler);
-    if(!SKSE::GetPapyrusInterface()->Register(MPL::Papyrus::Register)) {
+    if (!SKSE::GetPapyrusInterface()->Register(MPL::Papyrus::Register))
+    {
         logger::info("Failed to register Papyrus functions");
     }
     MPL::Hooks::Install();

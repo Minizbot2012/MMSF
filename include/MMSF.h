@@ -6,10 +6,7 @@ namespace MPL::API::MMSF
     {
     public:
         MMSFAPIFeatures GetVersion() override;
-        RE::FormID LookupFormIDForEDID(std::string) override;
-        std::string LookupEDIDForFormID(RE::FormID) override;
-        RE::TESForm* LookupCachedForm(std::string) override;
-        RE::TESForm* AllocateForm(std::string, RE::FormType) override;
-
+        void RegisterService(API::MMSF::IPluginService*) override;
+        API::MMSF::IPluginService* QueryService(std::string&) override;
     };
-}  // namespace MPL::API
+}  // namespace MPL::API::MMSF
