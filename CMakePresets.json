@@ -116,8 +116,6 @@
       "hidden": true,
       "inherits": ["compiler-clang"],
       "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "x64-windows-clangcl",
-        "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg/triplets",
         "CMAKE_CXX_COMPILER": "clang-cl",
         "CMAKE_C_COMPILER": "clang-cl"
       },
@@ -141,20 +139,20 @@
       "binaryDir": "${sourceDir}/build"
     },
     {
-      "name": "vs2026-windows-vcpkg",
+      "name": "clang-windows-vcpkg",
       "inherits": [
         "buildtype-release",
         "architecture-x64",
         "platform-win32-unicode",
         "generator-ninja",
-        "compiler-msvc",
+        "compiler-clangcl",
         "packaging-vcpkg",
         "common"
       ],
-      "binaryDir": "${sourceDir}/build/release-vs2026-windows-vcpkg"
+      "binaryDir": "${sourceDir}/build/release-clang-windows-vcpkg"
     },
     {
-      "name": "clang-windows-vcpkg",
+      "name": "clang-linux-vcpkg",
       "inherits": [
         "buildtype-release",
         "architecture-x64",
@@ -173,8 +171,8 @@
       "configurePreset": "clang-windows-vcpkg"
     },
     {
-      "name": "vs2026-windows-vcpkg",
-      "configurePreset": "vs2026-windows-vcpkg"
+      "name": "clang-linux-vcpkg",
+      "configurePreset": "clang-linux-vcpkg"
     }
   ]
 }
