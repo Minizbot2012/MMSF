@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  PRESET: "vs2026-windows-vcpkg"
+  PRESET: "clang-windows-vcpkg"
   PROJECT_NAME: MMSF
   VCPKG_ROOT: "C:\\vcpkg"
 
@@ -32,13 +32,14 @@ jobs:
       - name: Build
         run: cmake --build --preset ${{env.PRESET}}  --config Release
       - name: Archive
-        run: 7z a ${{ env.PROJECT_NAME }}.zip ./build/release/*.*
+        run: 7z a ${{ env.PROJECT_NAME }}.zip ./build/release-clang-windows-vcpkg/${{ env.PROJECT_NAME }}.dll ./build/release-clang-windows-vcpkg/${{ env.PROJECT_NAME }}.pdb
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: "Skyrim NG"
           path: |
-            ./build/release/*.*
+            ./build/release-clang-windows-vcpkg/${{ env.PROJECT_NAME }}.dll
+            ./build/release-clang-windows-vcpkg/${{ env.PROJECT_NAME }}.pdb
       - name: Create & Upload Release
         id: upload-release
         uses: softprops/action-gh-release@v2
