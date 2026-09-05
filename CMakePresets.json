@@ -141,7 +141,7 @@
       "binaryDir": "${sourceDir}/build"
     },
     {
-      "name": "windows-vcpkg",
+      "name": "vs2026-windows-vcpkg",
       "inherits": [
         "buildtype-release",
         "architecture-x64",
@@ -151,10 +151,10 @@
         "packaging-vcpkg",
         "common"
       ],
-      "binaryDir": "${sourceDir}/build/release-linux-clangcl-vcpkg-all"
+      "binaryDir": "${sourceDir}/build/release-vs2026-windows-vcpkg"
     },
     {
-      "name": "linux-windows-vcpkg",
+      "name": "clang-windows-vcpkg",
       "inherits": [
         "buildtype-release",
         "architecture-x64",
@@ -169,14 +169,12 @@
   ],
   "buildPresets": [
     {
-      "name": "linux-windows-vcpkg",
-      "configurePreset": "linux-windows-vcpkg",
-      "configuration": "Release"
+      "name": "clang-windows-vcpkg",
+      "configurePreset": "clang-windows-vcpkg"
     },
     {
-      "name": "windows-vcpkg",
-      "configurePreset": "windows-vcpkg",
-      "configuration": "Release"
+      "name": "vs2026-windows-vcpkg",
+      "configurePreset": "vs2026-windows-vcpkg"
     }
   ]
 }
