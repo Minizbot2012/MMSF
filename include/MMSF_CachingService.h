@@ -15,6 +15,8 @@ namespace MPL::API::MMSF
             static CachingService instance;
             return &instance;
         }
+        uint8_t GetVersion() override { return 1; }
+        std::string GetName() override { return "EDID"; }
         void Initialize() override;
         rfl::Generic::Object Save();
         void Load(rfl::Generic::Object) override;

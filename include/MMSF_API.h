@@ -1,7 +1,6 @@
 #pragma once
 #include <rfl/Generic.hpp>
 #include <cstdint>
-#include <type_traits>
 namespace MPL::API::MMSF
 {
     enum struct MMSFAPIFeatures : uint64_t
@@ -39,16 +38,12 @@ namespace MPL::API::MMSF
     class IFormAllocator : public IPluginService
     {
     public:
-        uint8_t GetVersion() override { return 1; }
-        std::string GetName() override { return "ALLOC"; }
         virtual RE::TESForm* AllocateForm(std::string, RE::FormType) = 0;
     };
     //Service name "EDID"
     class IEDIDCache : public IPluginService
     {
     public:
-        uint8_t GetVersion() override { return 1; }
-        std::string GetName() override { return "EDID"; }
         virtual RE::FormID LookupEdid(std::string) = 0;
         virtual std::string LookupFormID(RE::FormID) = 0;
         virtual RE::TESForm* LookupCachedForm(std::string) = 0;

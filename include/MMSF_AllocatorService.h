@@ -1,6 +1,7 @@
 #pragma once
 #include <IdPool.h>
 #include <MMSF_API.h>
+#include <cstdint>
 namespace MPL::API::MMSF
 {
     class AllocatorService : public IFormAllocator
@@ -20,6 +21,8 @@ namespace MPL::API::MMSF
             static AllocatorService instance;
             return &instance;
         }
+        uint8_t GetVersion() override { return 1; }
+        std::string GetName() override { return "ALLOC"; }
         void Initialize() override;
         rfl::Generic::Object Save() override;
         void Load(rfl::Generic::Object) override;
