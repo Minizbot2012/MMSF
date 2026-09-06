@@ -62,7 +62,8 @@ namespace MPL::API::MMSF
     {
         enum message_type : uint32_t
         {
-            kMessage_GetInterface = 'MMSF'
+            kMessage_GetInterface = 'MMSF',
+            kMessage_MMSFReady = 'MMSR'
         };
         Interface* API;
     };

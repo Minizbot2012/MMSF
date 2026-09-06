@@ -1,3 +1,4 @@
+#include "MMSF_API.h"
 #include "MMSF_AllocatorService.h"
 #include "MMSF_CachingService.h"
 #include <Hook.h>
@@ -5,6 +6,7 @@
 #include <MMSF_Core.h>
 #include <Papyrus.h>
 #include <Plugin.h>
+#include <SKSE/API.h>
 #include <SKSE/Interfaces.h>
 #include <rfl/Generic.hpp>
 
@@ -23,7 +25,13 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
     switch (msg->type)
     {
     case SKSE::MessagingInterface::kPostPostLoad:
+        {
+            MPL::API::MMSF::MMSFMessage ready{};
+            ready.API = &g_mmsf;
+            SKSE::GetMessagingInterface()->Dispatch(MPL::API::MMSF::MMSFMessage::kMessage_MMSFReady, &ready, sizeof(ready), nullptr);
+        }
         MPL::Services::ServiceContainer::GetSingleton()->Init();
+        break;
     case SKSE::MessagingInterface::kPostLoad:
         SKSE::GetMessagingInterface()->RegisterListener(nullptr, APIHandler);
         MPL::Services::ServiceContainer::GetSingleton()->RegisterService(MPL::API::MMSF::CachingService::GetSingleton());

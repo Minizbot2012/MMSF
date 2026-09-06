@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  PRESET: "clang-windows-vcpkg"
+  PRESET: clang-windows-vcpkg
   PROJECT_NAME: MMSF
   VCPKG_ROOT: "C:\\vcpkg"
 
