@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.40)
-set(NAME "MMSF" CACHE STRING "")
+set(NAME MMSF CACHE STRING "")
 set(VERSION 2.0.0.0 CACHE STRING "")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -53,20 +53,20 @@ source_group(
 # ---- Create DLL ----
 
 add_library(
- ${PROJECT_NAME}
+ 00_${PROJECT_NAME}
  SHARED
  ${headers}
  ${sources}
 )
 
 target_compile_features(
- ${PROJECT_NAME}
+ 00_${PROJECT_NAME}
  PUBLIC
   cxx_std_23
 )
 
 target_include_directories(
- ${PROJECT_NAME}
+ 00_${PROJECT_NAME}
  PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -78,7 +78,7 @@ find_package(reflectcpp CONFIG REQUIRED)
 find_package(xxHash CONFIG REQUIRED)
 
 target_link_libraries(
- ${PROJECT_NAME}
+ 00_${PROJECT_NAME}
  PRIVATE
   CommonLibSSE::CommonLibSSE
   reflectcpp::reflectcpp
@@ -86,14 +86,14 @@ target_link_libraries(
 )
 
 target_precompile_headers(
- ${PROJECT_NAME}
+ 00_${PROJECT_NAME}
  PRIVATE
   include/PCH.h
 )
 
 if(MSVC)
   target_compile_options(
-    "${PROJECT_NAME}"
+    00_${PROJECT_NAME}
     PUBLIC
 		# Enhanced debug information for optimized code (includes all type info in PDB for RE/debugging)
 		"$<$<CONFIG:Debug>:/Zo>"
@@ -129,7 +129,7 @@ if(MSVC)
 		/wd5220 # 'member': a non-static data member with a volatile qualified type no longer implies that compiler generated copy / move constructors and copy / move assignment operators are not trivial
 	)
 	target_link_options(
-		"${PROJECT_NAME}"
+		00_${PROJECT_NAME}
 		PRIVATE
 		/DEBUG
 		/INCREMENTAL:NO

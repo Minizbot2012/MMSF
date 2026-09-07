@@ -8,7 +8,7 @@ on:
 
 env:
   PRESET: clang-windows-vcpkg
-  PROJECT_NAME: MMSF
+  PROJECT_NAME: 00_MMSF
   VCPKG_ROOT: "C:\\vcpkg"
 
 permissions:
