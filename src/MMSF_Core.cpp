@@ -1,6 +1,7 @@
 #include <MMSF_Core.h>
 #include <SKSE/Logger.h>
 #include <cstdint>
+#include <filesystem>
 #include <rfl/Generic.hpp>
 #include <rfl/flexbuf/load.hpp>
 #include <rfl/flexbuf/save.hpp>
@@ -20,7 +21,7 @@ namespace MPL::Services
                 logger::error("Failed to initialize service {}: {}", name, e.what());
             }
         }
-        try
+        if (std::filesystem::exists("Data/SKSE/MMSF.bin"))
         {
             if (auto tmp = rfl::flexbuf::load<rfl::Generic::Object>("Data/SKSE/MMSF.bin"); tmp.has_value())
             {
@@ -29,9 +30,9 @@ namespace MPL::Services
                 {
                     try
                     {
-                        if (bigObj.at(name).to_object().has_value())
+                        if (bigObj.count(name) != 0 && bigObj.at(name).to_object().has_value())
                         {
-                            service->Load(bigObj[name].to_object().value());
+                            service->Load(bigObj.at(name).to_object().value_or(rfl::Generic::Object()));
                         }
                     } catch (const std::exception& e)
                     {
@@ -39,9 +40,6 @@ namespace MPL::Services
                     }
                 }
             }
-        } catch (const std::exception& e)
-        {
-            logger::error("Failed to load MMSF save block: {}", e.what());
         }
     }
     void ServiceContainer::Save()
