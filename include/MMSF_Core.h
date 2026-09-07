@@ -10,7 +10,6 @@ namespace MPL::Services
     class ServiceContainer : public REX::Singleton<ServiceContainer>
     {
     private:
-        std::mutex _lock;
         std::unordered_map<std::string, API::MMSF::IPluginService*> service_map;
 
     public:
