@@ -20,26 +20,30 @@ namespace MPL::Services
                 logger::error("Failed to initialize service {}: {}", name, e.what());
             }
         }
-
-        if (auto tmp = rfl::flexbuf::load<rfl::Generic::Object>("Data/SKSE/MMSF.bin"); tmp.has_value())
+        try
         {
-            auto bigObj = tmp.value();
-            for (auto [name, service] : service_map)
+            if (auto tmp = rfl::flexbuf::load<rfl::Generic::Object>("Data/SKSE/MMSF.bin"); tmp.has_value())
             {
-                try
+                auto bigObj = tmp.value();
+                for (auto [name, service] : service_map)
                 {
-                    if (bigObj.at(name).to_object().has_value())
+                    try
                     {
-                        service->Load(bigObj[name].to_object().value());
+                        if (bigObj.at(name).to_object().has_value())
+                        {
+                            service->Load(bigObj[name].to_object().value());
+                        }
+                    } catch (const std::exception& e)
+                    {
+                        logger::error("Failed to restore MMSF service {}: {}", name, e.what());
                     }
-                } catch (const std::exception& e)
-                {
-                    logger::error("Failed to load MMSF save block: {}", e.what());
                 }
             }
+        } catch (const std::exception& e)
+        {
+            logger::error("Failed to load MMSF save block: {}", e.what());
         }
     }
-
     void ServiceContainer::Save()
     {
         rfl::Generic::Object bigObj;
