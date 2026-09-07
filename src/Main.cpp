@@ -28,9 +28,14 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
         {
             MPL::API::MMSF::MMSFMessage ready{};
             ready.API = &g_mmsf;
-            SKSE::GetMessagingInterface()->Dispatch(MPL::API::MMSF::MMSFMessage::kMessage_MMSFReady, &ready, sizeof(ready), nullptr);
+            SKSE::GetMessagingInterface()->Dispatch(MPL::API::MMSF::MMSFMessage::kMessage_MMSFServicesReg, &ready, sizeof(ready), nullptr);
         }
         MPL::Services::ServiceContainer::GetSingleton()->Init();
+        {
+            MPL::API::MMSF::MMSFMessage servicesReady{};
+            servicesReady.API = &g_mmsf;
+            SKSE::GetMessagingInterface()->Dispatch(MPL::API::MMSF::MMSFMessage::kMessage_MMSFServicesReady, &servicesReady, sizeof(servicesReady), nullptr);
+        }
         break;
     case SKSE::MessagingInterface::kPostLoad:
         SKSE::GetMessagingInterface()->RegisterListener(nullptr, APIHandler);
