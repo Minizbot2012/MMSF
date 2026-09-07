@@ -1,4 +1,5 @@
 #include <MMSF_Core.h>
+#include <SKSE/Logger.h>
 #include <cstdint>
 #include <rfl/Generic.hpp>
 #include <rfl/flexbuf/load.hpp>
@@ -9,16 +10,33 @@ namespace MPL::Services
 {
     void ServiceContainer::Init()
     {
-        if (auto tmp = rfl::flexbuf::load<rfl::Generic::Object>("Data/SKSE/MMSF.bin"); tmp.has_value())
+        for (auto [name, service] : service_map)
         {
-            auto bigObj = tmp.value();
-            for (auto [name, service] : service_map)
+            try
             {
-                if (bigObj.at(name).to_object().has_value())
+                service->Initialize();
+            } catch (const std::exception& e)
+            {
+                logger::error("Failed to initialize service {}: {}", name, e.what());
+            }
+        }
+        try
+        {
+            if (auto tmp = rfl::flexbuf::load<rfl::Generic::Object>("Data/SKSE/MMSF.bin"); tmp.has_value())
+            {
+                auto bigObj = tmp.value();
+                for (auto [name, service] : service_map)
                 {
-                    service->Load(bigObj[name].to_object().value());
+                    service->Initialize();
+                    if (bigObj.at(name).to_object().has_value())
+                    {
+                        service->Load(bigObj[name].to_object().value());
+                    }
                 }
             }
+        } catch (const std::exception& e)
+        {
+            logger::error("Failed to load MMSF save block: {}", e.what());
         }
     }
 
@@ -39,8 +57,8 @@ namespace MPL::Services
     {
         if (!this->service_map.contains(service->GetName()))
         {
+            logger::info("Registering service: {}", service->GetName());
             this->service_map[service->GetName()] = service;
-            service->Initialize();
         }
     }
     API::MMSF::IPluginService* ServiceContainer::QueryService(std::string name)

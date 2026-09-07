@@ -8,6 +8,7 @@
 #include <Plugin.h>
 #include <SKSE/API.h>
 #include <SKSE/Interfaces.h>
+#include <SKSE/Logger.h>
 #include <rfl/Generic.hpp>
 
 MPL::API::MMSF::Shim g_mmsf;
@@ -20,22 +21,31 @@ void APIHandler(SKSE::MessagingInterface::Message* msg)
         break;
     }
 }
+
+void SendRegMessage()
+{
+    MPL::API::MMSF::MMSFMessage ready{};
+    ready.API = &g_mmsf;
+    SKSE::GetMessagingInterface()->Dispatch(MPL::API::MMSF::MMSFMessage::kMessage_MMSFServicesReg, &ready, sizeof(ready), nullptr);
+};
+
+void SendReadyMessage()
+{
+    MPL::API::MMSF::MMSFMessage servicesReady{};
+    servicesReady.API = &g_mmsf;
+    SKSE::GetMessagingInterface()->Dispatch(MPL::API::MMSF::MMSFMessage::kMessage_MMSFServicesReady, &servicesReady, sizeof(servicesReady), nullptr);
+};
+
 void MessageHandler(SKSE::MessagingInterface::Message* msg)
 {
     switch (msg->type)
     {
-    case SKSE::MessagingInterface::kPostPostLoad:
-        {
-            MPL::API::MMSF::MMSFMessage ready{};
-            ready.API = &g_mmsf;
-            SKSE::GetMessagingInterface()->Dispatch(MPL::API::MMSF::MMSFMessage::kMessage_MMSFServicesReg, &ready, sizeof(ready), nullptr);
-        }
+    case SKSE::MessagingInterface::kDataLoaded:
         MPL::Services::ServiceContainer::GetSingleton()->Init();
-        {
-            MPL::API::MMSF::MMSFMessage servicesReady{};
-            servicesReady.API = &g_mmsf;
-            SKSE::GetMessagingInterface()->Dispatch(MPL::API::MMSF::MMSFMessage::kMessage_MMSFServicesReady, &servicesReady, sizeof(servicesReady), nullptr);
-        }
+        SendReadyMessage();
+        break;
+    case SKSE::MessagingInterface::kPostPostLoad:
+        SendRegMessage();
         break;
     case SKSE::MessagingInterface::kPostLoad:
         SKSE::GetMessagingInterface()->RegisterListener(nullptr, APIHandler);
