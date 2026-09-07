@@ -43,6 +43,7 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
     case SKSE::MessagingInterface::kDataLoaded:
         MPL::Services::ServiceContainer::GetSingleton()->Init();
         SendReadyMessage();
+        MPL::Services::ServiceContainer::GetSingleton()->Save();
         break;
     case SKSE::MessagingInterface::kPostPostLoad:
         SendRegMessage();
