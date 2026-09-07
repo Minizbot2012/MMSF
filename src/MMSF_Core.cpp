@@ -20,23 +20,23 @@ namespace MPL::Services
                 logger::error("Failed to initialize service {}: {}", name, e.what());
             }
         }
-        try
+
+        if (auto tmp = rfl::flexbuf::load<rfl::Generic::Object>("Data/SKSE/MMSF.bin"); tmp.has_value())
         {
-            if (auto tmp = rfl::flexbuf::load<rfl::Generic::Object>("Data/SKSE/MMSF.bin"); tmp.has_value())
+            auto bigObj = tmp.value();
+            for (auto [name, service] : service_map)
             {
-                auto bigObj = tmp.value();
-                for (auto [name, service] : service_map)
+                try
                 {
-                    service->Initialize();
                     if (bigObj.at(name).to_object().has_value())
                     {
                         service->Load(bigObj[name].to_object().value());
                     }
+                } catch (const std::exception& e)
+                {
+                    logger::error("Failed to load MMSF save block: {}", e.what());
                 }
             }
-        } catch (const std::exception& e)
-        {
-            logger::error("Failed to load MMSF save block: {}", e.what());
         }
     }
 
