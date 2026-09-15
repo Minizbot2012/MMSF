@@ -3,6 +3,7 @@
   "version-string": "1",
   "dependencies": [
     "xxhash",
+    "imgui",
     "commonlibsse-ng",
     { "name": "reflectcpp", "features": ["flexbuffers"] }
   ]

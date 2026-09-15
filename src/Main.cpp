@@ -1,6 +1,7 @@
 #include "MMSF_API.h"
 #include "MMSF_AllocatorService.h"
 #include "MMSF_CachingService.h"
+#include "MMSF_CompatService.h"
 #include <Hook.h>
 #include <MMSF.h>
 #include <MMSF_Core.h>
@@ -52,6 +53,7 @@ void MessageHandler(SKSE::MessagingInterface::Message* msg)
         SKSE::GetMessagingInterface()->RegisterListener(nullptr, APIHandler);
         MPL::Services::ServiceContainer::GetSingleton()->RegisterService(MPL::API::MMSF::CachingService::GetSingleton());
         MPL::Services::ServiceContainer::GetSingleton()->RegisterService(MPL::API::MMSF::AllocatorService::GetSingleton());
+        MPL::Services::ServiceContainer::GetSingleton()->RegisterService(MPL::API::MMSF::CompatService::GetSingleton());
         break;
     case SKSE::MessagingInterface::kSaveGame:
     case SKSE::MessagingInterface::kNewGame:
@@ -76,7 +78,7 @@ SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
     SKSE::InitInfo info;
     info.logName = MPL::Plugin::PROJECT.data();
     info.trampoline = true;
-    info.trampolineSize = 4 * 14;
+    info.trampolineSize = 2 * 14;
     SKSE::Init(a_skse, info);
     logger::info("Game version : {}", a_skse->RuntimeVersion().string());
     SKSE::GetMessagingInterface()->RegisterListener(MessageHandler);
