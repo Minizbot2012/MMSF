@@ -73,7 +73,11 @@ SKSEPluginInfo(
 
 SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
 {
-    SKSE::Init(a_skse);
+    SKSE::InitInfo info;
+    info.logName = MPL::Plugin::PROJECT.data();
+    info.trampoline = true;
+    info.trampolineSize = 4 * 14;
+    SKSE::Init(a_skse, info);
     logger::info("Game version : {}", a_skse->RuntimeVersion().string());
     SKSE::GetMessagingInterface()->RegisterListener(MessageHandler);
     SKSE::GetMessagingInterface()->RegisterListener(nullptr, APIHandler);

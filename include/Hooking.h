@@ -1,4 +1,5 @@
 #pragma once
+#include <SKSE/API.h>
 #include <cstdint>
 #include <format>
 
@@ -156,7 +157,6 @@ namespace stl
     void write_thunk_call(std::uintptr_t a_src)
     {
         auto& trampoline = SKSE::GetTrampoline();
-        SKSE::AllocTrampoline(14);
         details::set_func<Hook>(trampoline.write_call<5>(a_src, Hook::thunk));
     }
 

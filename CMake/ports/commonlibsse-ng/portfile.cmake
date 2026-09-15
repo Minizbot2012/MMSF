@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/alandtse/CommonLibSSE-NG
-    REF 7a60f4de794095d7b0f8928d1b930a52e9a7da83
+    REF d13d10a0ccb4945870eb841bf1ad8a6cf5ed84dd
     HEAD_REF ng
 )
 
@@ -35,6 +35,6 @@ file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/share/CommonLibSSE/CommonLibSSE")
 
 file(
-    INSTALL "${SOURCE_PATH}/COPYING"
+    INSTALL "${SOURCE_PATH}/COPYING.txt"
     DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}"
     RENAME copyright)
