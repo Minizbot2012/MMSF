@@ -17,7 +17,7 @@ namespace MPL::Compatibility
     struct Manifest
     {
         std::string id;
-        bool LumaManifest = false;
+        bool MMSFManifest = false;
         bool detailedLogging = false;
         bool notifications = true;
         std::string version;

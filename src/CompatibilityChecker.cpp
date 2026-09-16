@@ -177,7 +177,7 @@ namespace MPL::CompatibilityChecker
                         parsed.error().what());
                     continue;
                 }
-                if (!parsed.value().LumaManifest ||
+                if (!parsed.value().MMSFManifest ||
                     Lower(parsed.value().id) != Lower(a_id))
                 {
                     continue;
@@ -263,7 +263,7 @@ namespace MPL::CompatibilityChecker
                     continue;
                 }
                 auto settings = parsed.value();
-                if (!settings.LumaManifest)
+                if (!settings.MMSFManifest)
                 {
                     continue;
                 }
