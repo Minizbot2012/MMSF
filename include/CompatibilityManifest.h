@@ -11,6 +11,7 @@ namespace MPL::Compatibility
         std::string id;
         std::string minimumVersion;
         std::optional<std::string> maximumVersion;
+        bool Required = true;
         std::string notification;
     };
 

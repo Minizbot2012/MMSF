@@ -204,7 +204,7 @@ namespace MPL::CompatibilityChecker
             const std::optional<bool> a_detailedLogging,
             const std::optional<bool> a_notifications)
         {
-            const auto manifest = rfl::json::load<Compatibility::Manifest>(a_path.string());
+            const auto manifest = rfl::json::load<Compatibility::Manifest, rfl::DefaultIfMissing>(a_path.string());
             if (!manifest)
             {
                 logger::error(
@@ -357,6 +357,10 @@ namespace MPL::CompatibilityChecker
                     const auto target = byID.find(Lower(requirement.id));
                     if (target == byID.end())
                     {
+                        if (!requirement.Required)
+                        {
+                            continue;
+                        }
                         AddIssue(
                             std::format(
                                 "{} {} requires {} {}, but its settings file was not found.",
@@ -446,13 +450,13 @@ namespace MPL::CompatibilityChecker
             for (const auto& issue : issues)
             {
                 std::string message =
-                    "Luma compatibility warning\n\n";
+                    "Compatibility Warning\n\n";
                 message.append(
                     issue.notification.empty() ?
                         issue.detail :
                         issue.notification);
                 message.append(
-                    "\n\nReview LumaUtil.log for additional information.");
+                    "\n\nReview MMSF.log for additional information.");
 
                 if (auto* tasks = SKSE::GetTaskInterface())
                 {
