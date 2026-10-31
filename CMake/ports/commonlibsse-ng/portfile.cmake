@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/alandtse/CommonLibSSE-NG
-    REF 729c75cdae6d9917a62e4175e369d71ba3e94a52
+    REF adebc31dcfa65077594526e36373bbc4d8a474b4
     HEAD_REF ng
 )
 
