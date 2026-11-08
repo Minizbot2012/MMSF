@@ -23,6 +23,7 @@ namespace MPL::CompatibilityChecker
     {
         const std::filesystem::path kSettingsRoot{ "./Data/SKSE/Plugins" };
         constexpr std::string_view kSettingsSuffix = "settings.json";
+        constexpr std::wstring_view kSettingsSuffixWString = L"settings.json";
 
         struct Version
         {
@@ -55,6 +56,18 @@ namespace MPL::CompatibilityChecker
             return state;
         }
 
+        std::wstring Lower(std::wstring_view a_value)
+        {
+            std::wstring result(a_value);
+            std::ranges::transform(
+                result,
+                result.begin(),
+                [](const wchar_t a_character) {
+                    return static_cast<wchar_t>(std::tolower(a_character));
+                });
+            return result;
+        }
+
         std::string Lower(std::string_view a_value)
         {
             std::string result(a_value);
@@ -65,6 +78,22 @@ namespace MPL::CompatibilityChecker
                     return static_cast<char>(std::tolower(a_character));
                 });
             return result;
+        }
+
+
+        bool IsAscii(std::wstring_view str) {
+            return std::all_of(str.begin(), str.end(), [](wchar_t c) {
+                return c <= 127;
+            });
+        }
+
+        bool EndsWithIgnoreCase(
+            const std::wstring_view a_value,
+            const std::wstring_view a_suffix)
+        {
+            return a_value.size() >= a_suffix.size() &&
+                   Lower(a_value.substr(a_value.size() - a_suffix.size())) ==
+                       Lower(a_suffix);
         }
 
         bool EndsWithIgnoreCase(
@@ -158,9 +187,9 @@ namespace MPL::CompatibilityChecker
                 iterator != end && !error;
                 iterator.increment(error))
             {
-                const auto filename = iterator->path().filename().string();
+                const auto filename = iterator->path().filename().wstring();
                 if (!iterator->is_regular_file(error) ||
-                    !EndsWithIgnoreCase(filename, kSettingsSuffix))
+                    !EndsWithIgnoreCase(filename, kSettingsSuffixWString) || !IsAscii(filename))
                 {
                     continue;
                 }
