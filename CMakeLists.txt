@@ -97,7 +97,7 @@ if(MSVC)
     PUBLIC
 		# Enhanced debug information for optimized code (includes all type info in PDB for RE/debugging)
 		"$<$<CONFIG:Debug>:/Zo>"
-
+		/utf-8
 		# Standards conformance
 		/Z7
 		# disable warnings
