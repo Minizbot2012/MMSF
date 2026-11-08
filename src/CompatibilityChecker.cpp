@@ -9,6 +9,7 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <locale>
 #include <ranges>
 #include <rfl/json/load.hpp>
 #include <rfl/json/write.hpp>
@@ -16,15 +17,13 @@
 #include <string_view>
 #include <vector>
 
-
 namespace MPL::CompatibilityChecker
 {
     namespace
     {
         const std::filesystem::path kSettingsRoot{ "./Data/SKSE/Plugins" };
-        constexpr std::string_view kSettingsSuffix = "settings.json";
-        constexpr std::wstring_view kSettingsSuffixWString = L"settings.json";
-
+        constexpr std::wstring_view kSettingsSuffix = L"settings.json";
+        inline std::locale loc("en_US.UTF-8");
         struct Version
         {
             std::vector<std::uint32_t> parts;
@@ -63,7 +62,7 @@ namespace MPL::CompatibilityChecker
                 result,
                 result.begin(),
                 [](const wchar_t a_character) {
-                    return static_cast<wchar_t>(std::tolower(a_character));
+                    return std::tolower(a_character, loc);
                 });
             return result;
         }
@@ -75,30 +74,14 @@ namespace MPL::CompatibilityChecker
                 result,
                 result.begin(),
                 [](const unsigned char a_character) {
-                    return static_cast<char>(std::tolower(a_character));
+                    return std::tolower(a_character, loc);
                 });
             return result;
-        }
-
-
-        bool IsAscii(std::wstring_view str) {
-            return std::all_of(str.begin(), str.end(), [](wchar_t c) {
-                return c <= 127;
-            });
         }
 
         bool EndsWithIgnoreCase(
             const std::wstring_view a_value,
             const std::wstring_view a_suffix)
-        {
-            return a_value.size() >= a_suffix.size() &&
-                   Lower(a_value.substr(a_value.size() - a_suffix.size())) ==
-                       Lower(a_suffix);
-        }
-
-        bool EndsWithIgnoreCase(
-            const std::string_view a_value,
-            const std::string_view a_suffix)
         {
             return a_value.size() >= a_suffix.size() &&
                    Lower(a_value.substr(a_value.size() - a_suffix.size())) ==
@@ -189,7 +172,8 @@ namespace MPL::CompatibilityChecker
             {
                 const auto filename = iterator->path().filename().wstring();
                 if (!iterator->is_regular_file(error) ||
-                    !EndsWithIgnoreCase(filename, kSettingsSuffixWString) || !IsAscii(filename))
+                    iterator->path().extension() != ".json" ||
+                    !EndsWithIgnoreCase(filename, kSettingsSuffix))
                 {
                     continue;
                 }
@@ -248,7 +232,8 @@ namespace MPL::CompatibilityChecker
             return rfl::json::save(
                 a_path.string(),
                 val,
-                rfl::json::pretty).has_value();
+                rfl::json::pretty)
+                .has_value();
         }
 
         void LoadManifests()
@@ -268,8 +253,9 @@ namespace MPL::CompatibilityChecker
                 iterator.increment(error))
             {
                 const auto filename =
-                    iterator->path().filename().string();
+                    iterator->path().filename().wstring();
                 if (iterator->is_regular_file(error) &&
+                    iterator->path().extension() == ".json" &&
                     EndsWithIgnoreCase(filename, kSettingsSuffix))
                 {
                     files.push_back(iterator->path());
